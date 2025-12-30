@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 app.use(cors());
 
-// Set up uploads folder
+// Ensure uploads folder exists
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
@@ -21,13 +21,13 @@ const upload = multer({ storage });
 // Upload endpoint
 app.post("/api/upload", upload.single("fileToUpload"), (req, res) => {
   if (!req.file) return res.status(400).send("No file uploaded.");
-  // Replace with your public URL if needed
+  // Return file URL (replace with real domain if you have one)
   const fileUrl = `https://your-domain.com/uploads/${req.file.filename}`;
   res.send(fileUrl);
 });
 
 // Health check
-app.get("/", (req, res) => res.send("Neon Uploaders API running"));
+app.get("/", (req, res) => res.send("Neon Uploader API is running"));
 
 // Start server
 const PORT = process.env.PORT || 3000;
