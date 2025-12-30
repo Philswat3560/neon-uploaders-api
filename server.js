@@ -1,28 +1,29 @@
-import express from "express";
-import cors from "cors";
-import multer from "multer";
-import fs from "fs";
+const express = require("express");
+const cors = require("cors");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 
-// Setup temporary file storage
+// Set up uploads folder
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+
+// Multer setup
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
-    cb(null, "uploads/");
-  },
+  destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
 });
-
 const upload = multer({ storage });
 
 // Upload endpoint
 app.post("/api/upload", upload.single("fileToUpload"), (req, res) => {
   if (!req.file) return res.status(400).send("No file uploaded.");
-  // Return URL (demo: local path)
-  const url = `https://yourdomain.com/uploads/${req.file.filename}`;
-  res.send(url);
+  // Replace with your public URL if needed
+  const fileUrl = `https://your-domain.com/uploads/${req.file.filename}`;
+  res.send(fileUrl);
 });
 
 // Health check
