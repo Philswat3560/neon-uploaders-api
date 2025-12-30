@@ -27,7 +27,7 @@ app.post("/api/upload", upload.single("fileToUpload"), (req, res) => {
 });
 
 // Health check
-app.get("/", (req, res) => res.send("Neon Uploader API running"));
+app.get("/", (req, res) => res.send("Neon Uploaders API running"));
 
 // Start server
 const PORT = process.env.PORT || 3000;
